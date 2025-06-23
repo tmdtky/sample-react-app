@@ -1,16 +1,16 @@
-import React, { useEffect, useState } from 'react'
-import classes from '../styles/Home.module.scss'
-import { Link } from 'react-router-dom'
-import { posts } from '../data/posts'
+import React, { useEffect, useState } from "react";
+import classes from "../styles/Home.module.scss";
+import { Link } from "react-router-dom";
+import { posts } from "../data/posts";
+import { Header } from "../components/Header";
 
 export const Home = () => {
-
-	return (
-		<div className="">
-			<div className={classes.container}>
-				<ul>
-					{/* 記事の一覧をmap処理で繰り返し表示します。*/}
-         {posts.map((post) => {
+  return (
+    <div className="">
+      <div className={classes.container}>
+        <ul>
+          {/* 記事の一覧をmap処理で繰り返し表示します。*/}
+          {posts.map((post) => {
             return (
               <li key={post.id} className={classes.list}>
                 <Link to={`/posts/${post.id}`} className={classes.link}>
@@ -29,7 +29,7 @@ export const Home = () => {
                               >
                                 {category}
                               </div>
-                            )
+                            );
                           })}
                         </div>
                       </div>
@@ -42,10 +42,10 @@ export const Home = () => {
                   </div>
                 </Link>
               </li>
-            )
+            );
           })}
-				</ul>
-			</div>
-		</div>
-	)
-}
+        </ul>
+      </div>
+    </div>
+  );
+};

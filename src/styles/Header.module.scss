@@ -1,9 +1,6 @@
-// TailwindCSSの設定
 @import 'tailwindcss/base';
 @import 'tailwindcss/components';
 @import 'tailwindcss/utilities';
-
-// こちらで記述したスタイルは、globalで全体に適用されます。
 
 body {
   margin: 0;
@@ -19,7 +16,12 @@ body {
   align-items: center;
 }
 
-.header-link {
+// キャメルケースに変更
+.headerLink {
   color: #fff;
   text-decoration: none;
+}
+
+.headerLink:hover {
+  color: #ccc;
 }
