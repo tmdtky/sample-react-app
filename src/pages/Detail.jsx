@@ -1,7 +1,7 @@
 import React, {useState, useEffect} from 'react'
 import { useParams, Link } from 'react-router-dom'
 import classes from '../styles/Detail.module.scss'
-import { posts as postsData } from '../data/posts'
+import { API_BASE_URL } from '../constants'
 
 export const Detail = () => {
   // react-routerのuseParamsを使って、URLのパラメータ（記事ID）を取得
@@ -11,22 +11,15 @@ export const Detail = () => {
   
   // データを模擬的にAPIから取得する処理をuseEffectで実行
   useEffect(() => {
-    const fetchPost = async () => {
+    const fetcher = async () => {
       setLoading(true)
-      
-      try {
-        // post.tsからIDに対応する記事を検索
-        const foundPost = postsData.find(p => p.id === parseInt(id))
-        setPost(foundPost || null)
-      } catch (error) {
-        console.error("Error fetching post:", error)
-        setPost(null)
-      } finally {
-        setLoading(false)
-      }
+      const res = await fetch(`${API_BASE_URL}/posts/${id}`)
+      const { post } = await res.json()
+      setPost(post)
+      setLoading(false)
     }
 
-    fetchPost()
+    fetcher()
   }, [id])
 
   // 記事取得中は、読み込み中であることを表示
