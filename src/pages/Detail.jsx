@@ -1,18 +1,42 @@
-import React from 'react';
-import { useParams, Link } from 'react-router-dom';
-import classes from '../styles/Detail.module.scss';
-import { posts } from '../data/posts';
+import React, {useState, useEffect} from 'react'
+import { useParams, Link } from 'react-router-dom'
+import classes from '../styles/Detail.module.scss'
+import { posts as postsData } from '../data/posts'
 
 export const Detail = () => {
   // react-routerのuseParamsを使って、URLのパラメータ（記事ID）を取得
-  const { id } = useParams();
+  const { id } = useParams()
+  const [post, setPost] = useState(null)
+  const [loading, setLoading] = useState(false)
   
-  // posts配列から該当するIDの記事を検索
-  const post = posts.find(post => post.id === parseInt(id));
+  // データを模擬的にAPIから取得する処理をuseEffectで実行
+  useEffect(() => {
+    const fetchPost = async () => {
+      setLoading(true)
+      
+      try {
+        // post.tsからIDに対応する記事を検索
+        const foundPost = postsData.find(p => p.id === parseInt(id))
+        setPost(foundPost || null)
+      } catch (error) {
+        console.error("Error fetching post:", error)
+        setPost(null)
+      } finally {
+        setLoading(false)
+      }
+    }
 
-	// 記事が見つからなかった場合の表示
-  if (!post) {
-		return <div>記事が見つかりません</div>
+    fetchPost()
+  }, [id])
+
+  // 記事取得中は、読み込み中であることを表示
+  if (loading) {
+    return <div>読み込み中...</div>
+  }
+
+  // 記事が見つからなかった場合の表示
+  if (!loading && !post) {
+    return <div>記事が見つかりません</div>
   }
 
   return (
