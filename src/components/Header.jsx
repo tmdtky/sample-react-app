@@ -8,7 +8,7 @@ export const Header = () => {
       <Link to="/" className={classes.headerLink}>
         Blog
       </Link>
-      <Link to="/" className={classes.headerLink}>
+      <Link to="/contact" className={classes.headerLink}>
         お問い合わせ
       </Link>
     </header>
