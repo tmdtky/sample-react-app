@@ -10,6 +10,7 @@ export const Contact = () => {
   const [name, setName] = useState('')
   const [email, setEmail] = useState('')
   const [message, setMessage] = useState('')
+  const [isSubmitting, setIsSubmitting] = useState(false)
 
   const [nameErrorMessage, setNameErrorMessage] = useState('')
   const [emailErrorMessage, setEmailErrorMessage] = useState('')
@@ -59,17 +60,25 @@ export const Contact = () => {
 
     if (!valid()) return
 
-    await fetch(`${API_BASE_URL}/contacts`, {
-      method: 'POST',
-      headers: {
-        'Content-Type': 'application/json',
-      },
-      body: JSON.stringify({ name, email, message }),
-    })
+    setIsSubmitting(true)
 
-    alert('送信しました。')
+    try {
+      await fetch(`${API_BASE_URL}/contacts`, {
+        method: 'POST',
+        headers: {
+          'Content-Type': 'application/json',
+        },
+        body: JSON.stringify({ name, email, message }),
+      })
 
-    handleClear()
+      alert('送信しました。')
+      handleClear()
+    } catch (error) {
+      console.error('送信エラー:', error)
+      alert('送信に失敗しました。もう一度お試しください。')
+    } finally {
+      setIsSubmitting(false)
+    }
   }
 
   /** フォームのクリア */
@@ -92,6 +101,7 @@ export const Contact = () => {
                 id="name"
                 value={name}
                 onChange={(value) => setName(value)}
+                disabled={isSubmitting}
               />
               <ErrorMessage message={nameErrorMessage} />
             </div>
@@ -104,6 +114,7 @@ export const Contact = () => {
                 id="email"
                 value={email}
                 onChange={(value) => setEmail(value)}
+                disabled={isSubmitting}
               />
               <ErrorMessage message={emailErrorMessage} />
             </div>
@@ -115,6 +126,7 @@ export const Contact = () => {
                 id="message"
                 value={message}
                 onChange={(value) => setMessage(value)}
+                disabled={isSubmitting}
               />
               <ErrorMessage message={messageErrorMessage} />
             </div>
@@ -122,14 +134,24 @@ export const Contact = () => {
           <div className="flex justify-center mt-10">
             <button
               type="submit"
-              className="bg-gray-800 text-white font-bold py-2 px-4 rounded-lg mr-4"
+              disabled={isSubmitting}
+              className={`font-bold py-2 px-4 rounded-lg mr-4 ${
+                isSubmitting
+                  ? 'bg-gray-400 text-gray-600 cursor-not-allowed'
+                  : 'bg-gray-800 text-white hover:bg-gray-700'
+              }`}
             >
-              送信
+              {isSubmitting ? '送信中...' : '送信'}
             </button>
             <button
               type="button"
               onClick={handleClear}
-              className="bg-gray-200 font-bold py-2 px-4 rounded-lg"
+              disabled={isSubmitting}
+              className={`font-bold py-2 px-4 rounded-lg ${
+                isSubmitting
+                  ? 'bg-gray-100 text-gray-400 cursor-not-allowed'
+                  : 'bg-gray-200 hover:bg-gray-300'
+              }`}
             >
               クリア
             </button>
